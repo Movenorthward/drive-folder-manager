@@ -8,7 +8,7 @@ Drive Folder Manager for Education 是一套為教育行政、學校專案與跨
 
 ## 線上入口
 
-- 專案介紹網站（GitHub Pages）：部署後網址為 `https://ckjhkeelung.github.io/drive-folder-manager-education/`
+- 專案介紹網站（GitHub Pages）：部署後網址為 `https://movenorthward.github.io/drive-folder-manager/'
 - Apps Script Web App：<https://script.google.com/a/macros/ckjh.kl.edu.tw/s/AKfycbyYrezhiy2nBHDj0fUDKcuoA1IqhYmKwdrqL1SyiRYlZsOcLEG-GFAdHV8dQ4pYD-oWCA/exec>
 
 > GitHub Pages 只用來放專案介紹與開源文件。真正可操作 Google Drive 的應用程式仍需部署在 Google Apps Script，因為它需要 Google 帳號授權與 Drive API 權限。
