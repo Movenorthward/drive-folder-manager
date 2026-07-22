@@ -14,7 +14,7 @@
 可直接透過目前部署的 Google Apps Script Web App 體驗：
 
 👉 **立即體驗版本：**  
-https://script.google.com/a/macros/ckjh.kl.edu.tw/s/AKfycbyYrezhiy2nBHDj0fUDKcuoA1IqhYmKwdrqL1SyiRYlZsOcLEG-GFAdHV8dQ4pYD-oWCA/exec
+https://drive-folder.movenorthward.workers.dev/
 
 👉 **GitHub 原始碼：**  
 https://github.com/Movenorthward/drive-folder-manager
