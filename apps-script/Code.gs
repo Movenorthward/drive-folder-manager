@@ -7,7 +7,7 @@
  */
 
 const APP_NAME = 'Drive Folder Manager for Education';
-const APP_VERSION = '3.7.1';
+const APP_VERSION = '3.7.2';
 const DB_PROPERTY_KEY = 'DRIVE_FOLDER_MANAGER_DATABASE_ID';
 const FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
 

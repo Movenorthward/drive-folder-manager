@@ -19,6 +19,7 @@
     .project-list{display:grid;gap:12px;margin-top:18px}.project-card{border:1px solid var(--border);border-radius:12px;padding:16px}.project-title{font-size:17px;font-weight:750}.current-project{margin-top:18px;padding:14px 16px;border-radius:12px;border:1px solid #bfdbfe;background:#eff6ff}.empty-state{text-align:center;padding:28px;border:1px dashed #cbd5e1;border-radius:12px;color:var(--muted)}
     .folder-select{width:auto}.project-filter{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.project-filter .btn.active{background:#e8f0ff;color:#1d4ed8;border:1px solid #b8cdfc}.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.dash-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}.dash-card b{display:block;font-size:22px;margin-top:4px}.log-list{display:grid;gap:8px;margin-top:10px}.log-item{padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:13px}.folder-select{width:auto}.danger-note{font-size:12px;color:#b42318}.pill{display:inline-block;padding:3px 8px;border-radius:999px;font-size:12px;background:#f2f4f7}
     .preflight-panel{margin-top:14px;border:1px solid var(--border);border-radius:12px;padding:14px;background:#fbfdff}.preflight-ok{border-color:#abefc6;background:#ecfdf3}.preflight-block{border-color:#fecaca;background:#fff1f1}.issue-list{margin:10px 0 0;padding-left:20px}.issue-error{color:var(--err)}.issue-warning{color:var(--warn)}
+    .app-footer{text-align:center;color:var(--muted);font-size:13px;padding:22px 8px 4px;margin-top:18px;border-top:1px solid var(--border)}
     @media(max-width:760px){.grid,.row,.dashboard-grid{grid-template-columns:1fr}.wrap{padding:16px}.hero{align-items:flex-start;flex-direction:column}.full{grid-column:auto}}
   </style>
 </head>
@@ -26,7 +27,7 @@
 <div class="wrap" id="app">
   <div class="hero">
     <div><h1>Drive Folder Manager for Education</h1><div class="subtitle">Google 雲端硬碟資料夾批次建立、智慧檢查、失敗重試、權限與資料夾管理</div></div>
-    <div class="hero-right"><div class="account-box">👤 <span id="currentUser">讀取帳號中...</span></div><div class="badge" id="versionBadge">v3.7.1</div><button class="btn danger" onclick="logoutAndSwitchAccount()">登出／切換帳號</button></div>
+    <div class="hero-right"><div class="account-box">👤 <span id="currentUser">讀取帳號中...</span></div><div class="badge" id="versionBadge">v3.7.2</div><button class="btn danger" onclick="logoutAndSwitchAccount()">登出／切換帳號</button></div>
   </div>
 
   <div class="notice">v3.7：建立新專案時可選擇「自動建立專案資料夾」或「使用既有資料夾」。自動建立模式會把專案資料夾自動帶入「1. 建立位置與規則」。</div>
@@ -106,6 +107,7 @@
 
     <section class="card full"><h2>4. 預覽 / 執行結果</h2><div class="summary" id="summary"></div><div class="actions" style="margin-bottom:12px"><button id="retryFailedBtn" class="btn danger hidden" onclick="retryFailedItems()">↻ 只重試失敗項目</button><button class="btn ghost" onclick="exportCsv()">匯出 CSV</button><button class="btn ghost" onclick="copyLinks()">複製所有成功連結</button></div><div class="table-wrap"><table><thead><tr><th>#</th><th>名稱</th><th>狀態</th><th>Folder ID</th><th>資料夾連結</th><th>訊息</th></tr></thead><tbody id="resultBody"><tr><td colspan="6">尚未執行</td></tr></tbody></table></div></section>
   </div>
+  <footer class="app-footer">©2026 Master <span id="footerVersion">v3.7.2</span></footer>
 </div>
 
 <script>
@@ -240,7 +242,7 @@ function csvCell(v){const s=String(v??'');return /[",\n]/.test(s)?'"'+s.replace(
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function escJs(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' ');}
 
-window.addEventListener('load',()=>{google.script.run.withSuccessHandler(info=>{appUrl=info.appUrl||'';document.getElementById('versionBadge').textContent='v'+(info.version||'3.2.1');document.getElementById('currentUser').textContent=info.email||'目前 Google 帳號';}).getAppInfo();loadProjects();});
+window.addEventListener('load',()=>{google.script.run.withSuccessHandler(info=>{appUrl=info.appUrl||'';const version='v'+(info.version||'3.7.2');document.getElementById('versionBadge').textContent=version;document.getElementById('footerVersion').textContent=version;document.getElementById('currentUser').textContent=info.email||'目前 Google 帳號';}).getAppInfo();loadProjects();});
 </script>
 </body>
 </html>
