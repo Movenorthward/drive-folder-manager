@@ -26,7 +26,7 @@
 <div class="wrap" id="app">
   <div class="hero">
     <div><h1>Drive Folder Manager for Education</h1><div class="subtitle">Google 雲端硬碟資料夾批次建立、智慧檢查、失敗重試、權限與資料夾管理</div></div>
-    <div class="hero-right"><div class="account-box">👤 <span id="currentUser">讀取帳號中...</span></div><div class="badge" id="versionBadge">v3.7</div><button class="btn danger" onclick="logoutAndSwitchAccount()">登出／切換帳號</button></div>
+    <div class="hero-right"><div class="account-box">👤 <span id="currentUser">讀取帳號中...</span></div><div class="badge" id="versionBadge">v3.7.1</div><button class="btn danger" onclick="logoutAndSwitchAccount()">登出／切換帳號</button></div>
   </div>
 
   <div class="notice">v3.7：建立新專案時可選擇「自動建立專案資料夾」或「使用既有資料夾」。自動建立模式會把專案資料夾自動帶入「1. 建立位置與規則」。</div>
@@ -96,10 +96,10 @@
 
     <section class="card full"><h2>3. 匯入要建立的名稱</h2>
       <div class="tabs"><button class="tab active" data-tab="paste">批次貼上</button><button class="tab" data-tab="single">單一建立</button><button class="tab" data-tab="csv">CSV 匯入</button><button class="tab" data-tab="manual">表格輸入</button></div>
-      <div id="tab-paste"><textarea id="bulkNames" placeholder="成功國中&#10;中正國中&#10;建德國中"></textarea></div>
-      <div id="tab-single" class="hidden"><input id="singleName" placeholder="例如：成功國中"></div>
+      <div id="tab-paste"><textarea id="bulkNames" placeholder="每行輸入一個資料夾名稱"></textarea></div>
+      <div id="tab-single" class="hidden"><input id="singleName" placeholder="例如：學校名稱或單位名稱"></div>
       <div id="tab-csv" class="hidden"><input id="csvFile" type="file" accept=".csv,text/csv"><div class="hint">欄位：name,email1,role1,email2,role2</div></div>
-      <div id="tab-manual" class="hidden"><textarea id="manualRows" placeholder="成功國中,a@school.edu.tw,writer"></textarea></div>
+      <div id="tab-manual" class="hidden"><textarea id="manualRows" placeholder="資料夾名稱,email,writer"></textarea></div>
       <div class="field" style="margin-top:15px"><label>統一加入 Email</label><textarea id="globalEmails" style="min-height:80px"></textarea></div>
       <div class="actions"><button class="btn secondary" onclick="runPreflight(false)">🔎 建立前智慧檢查</button><button class="btn primary" onclick="runCreate()">開始建立</button><button class="btn ghost" onclick="loadDemo()">載入範例</button></div><div id="preflightPanel" class="preflight-panel hidden"></div>
     </section>
@@ -133,7 +133,7 @@ function renderSummary(res){let h=`<div class="metric">總筆數<br><b>${res.tot
 function renderResults(res){renderSummary(res);document.getElementById('resultBody').innerHTML=(res.results||[]).map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td class="status-${r.status}">${esc(r.status)}</td><td>${esc(r.folderId||'-')}</td><td>${r.url?`<a href="${r.url}" target="_blank">開啟</a>`:'-'}</td><td>${esc(r.message||'')}</td></tr>`).join('');const failed=(res.results||[]).filter(r=>r.status==='error').length;document.getElementById('retryFailedBtn').classList.toggle('hidden',failed===0);}
 function exportCsv(){if(!lastResults.length){alert('沒有可匯出的結果');return;}const rows=[['名稱','狀態','Folder ID','資料夾連結','訊息'],...lastResults.map(r=>[r.name,r.status,r.folderId||'',r.url||'',r.message||''])];const csv='\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(currentProject?currentProject.projectName:'drive-folder')+'-results.csv';a.click();URL.revokeObjectURL(a.href);}
 function copyLinks(){const t=lastResults.filter(r=>r.url).map(r=>r.name+'\t'+r.url).join('\n');if(!t){alert('沒有可複製連結');return;}navigator.clipboard.writeText(t).then(()=>alert('已複製名稱與連結'));}
-function loadDemo(){document.getElementById('bulkNames').value='成功國中\n中正國中\n建德國中';document.getElementById('templateFolders').value='01_計畫書\n02_成果報告\n03_照片與影片';preview();document.getElementById('preflightPanel').classList.add('hidden');}
+function loadDemo(){document.getElementById('bulkNames').value='範例單位 A\n範例單位 B\n範例單位 C';document.getElementById('templateFolders').value='01_計畫書\n02_成果報告\n03_照片與影片';preview();document.getElementById('preflightPanel').classList.add('hidden');}
 
 function showCreateProjectDialog(){document.getElementById('createProjectPanel').classList.remove('hidden');document.getElementById('editProjectPanel').classList.add('hidden');toggleNewProjectFolderMode();}
 function hideCreateProjectDialog(){document.getElementById('createProjectPanel').classList.add('hidden');}

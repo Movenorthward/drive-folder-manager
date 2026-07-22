@@ -1,13 +1,13 @@
 /**
  * ============================================================
  * Drive Folder Manager for Education
- * Version 3.7
+ * Version 3.7.1
  * Google Apps Script + Drive Advanced Service API v2
  * ============================================================
  */
 
 const APP_NAME = 'Drive Folder Manager for Education';
-const APP_VERSION = '3.7';
+const APP_VERSION = '3.7.1';
 const DB_PROPERTY_KEY = 'DRIVE_FOLDER_MANAGER_DATABASE_ID';
 const FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
 
