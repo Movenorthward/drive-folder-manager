@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Drive Folder Manager for Education</title>
+  <meta name="description" content="Google Drive 教育行政資料夾管理工具，支援專案、批次建立、權限、範本與狀態管理。">
+  <style>
+    :root{color-scheme:light;--bg:#f6f8fb;--card:#fff;--text:#172033;--muted:#637083;--line:#dfe5ee;--accent:#2d6cdf}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+    .wrap{max-width:980px;margin:auto;padding:48px 20px 72px}.hero,.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px rgba(17,32,51,.05)}
+    .hero{padding:48px}.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef4ff;color:#2459b7;font-size:14px;font-weight:700}
+    h1{font-size:clamp(32px,6vw,56px);line-height:1.1;margin:18px 0}.lead{font-size:20px;color:var(--muted);max-width:760px}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.btn{display:inline-block;padding:12px 18px;border-radius:12px;text-decoration:none;font-weight:700;border:1px solid var(--line);color:var(--text);background:#fff}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:20px}.card{padding:22px}.card h3{margin-top:0}.muted{color:var(--muted)}
+    footer{margin-top:32px;color:var(--muted);font-size:14px;text-align:center}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <span class="badge">Open Source · v3.7.0</span>
+      <h1>Drive Folder Manager<br>for Education</h1>
+      <p class="lead">為教育行政與學校專案設計的 Google Drive 資料夾管理工具。支援專案管理、批次建立、子資料夾範本、權限設定、智慧檢查、垃圾桶與還原。</p>
+      <div class="actions">
+        <a class="btn primary" href="https://script.google.com/a/macros/ckjh.kl.edu.tw/s/AKfycbyYrezhiy2nBHDj0fUDKcuoA1IqhYmKwdrqL1SyiRYlZsOcLEG-GFAdHV8dQ4pYD-oWCA/exec" target="_blank" rel="noopener">開啟 Web App</a>
+        <a class="btn" href="https://github.com/CKJHKeelung/drive-folder-manager-education" target="_blank" rel="noopener">查看 GitHub 原始碼</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card"><h3>📁 專案與資料夾管理</h3><p class="muted">以專案為核心整合資料夾、統計、操作紀錄、封存與管理。</p></article>
+      <article class="card"><h3>⚡ 批次建立</h3><p class="muted">支援單筆、批次貼上、CSV、手動輸入與子資料夾範本。</p></article>
+      <article class="card"><h3>🔐 權限管理</h3><p class="muted">可設定 Viewer / Editor，並支援同一資料夾多位使用者。</p></article>
+      <article class="card"><h3>🧪 建立前檢查</h3><p class="muted">先檢查母資料夾、重複名稱、Email 與預計建立數量，再正式執行。</p></article>
+      <article class="card"><h3>↻ 失敗重試</h3><p class="muted">大量建立時只重試失敗項目，避免成功項目被重複建立。</p></article>
+      <article class="card"><h3>🗑 安全刪除</h3><p class="muted">資料夾以 Google Drive 垃圾桶與還原為主；刪除專案不會自動刪除 Drive 實體資料。</p></article>
+    </section>
+
+    <section class="card" style="margin-top:20px">
+      <h2>開源部署</h2>
+      <p>原始碼採 MIT License。GitHub Pages 僅提供專案介紹；真正操作 Google Drive 的應用程式需部署到你自己的 Google Apps Script，並由使用者完成 Google 帳號授權。</p>
+      <p><strong>作者：</strong>詹夫子 @MoveNorthward</p>
+    </section>
+
+    <footer>Drive Folder Manager for Education · MIT License · 2026</footer>
+  </main>
+</body>
+</html>

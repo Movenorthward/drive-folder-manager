@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root{--bg:#f5f8fc;--card:#fff;--text:#183153;--muted:#667085;--primary:#2563eb;--border:#dfe7f1;--ok:#067647;--warn:#b54708;--err:#b42318}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1180px;margin:auto;padding:28px}.hero,.project-header,.toolbar{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+    h1{margin:0;font-size:28px}.subtitle,.hint,.project-meta{color:var(--muted)}.hero-right,.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .account-box,.badge{padding:8px 12px;border-radius:999px;font-size:13px}.account-box{background:#fff;border:1px solid var(--border)}.badge{background:#e8f0ff;color:#1d4ed8}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(16,24,40,.05)}.full{grid-column:1/-1}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}label{display:block;font-weight:650;margin-bottom:6px;font-size:14px}input,select,textarea{width:100%;border:1px solid #cfd8e6;border-radius:10px;padding:10px 12px;font:inherit;background:#fff}textarea{min-height:110px;resize:vertical}
+    .btn{border:0;border-radius:10px;padding:10px 15px;font-weight:700;cursor:pointer}.primary{background:var(--primary);color:#fff}.secondary{background:#eef4ff;color:#1d4ed8}.ghost{background:#fff;border:1px solid var(--border);color:var(--text)}.danger{background:#fff1f1;color:#b42318;border:1px solid #fecaca}.success{background:#ecfdf3;color:#067647;border:1px solid #abefc6}
+    .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.tab{padding:8px 11px;border-radius:9px;border:1px solid var(--border);background:#fff;cursor:pointer}.tab.active{background:#e8f0ff;color:#1d4ed8;border-color:#b8cdfc}.hidden{display:none!important}
+    .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:900px}th,td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;font-size:13px}th{background:#f8fafc}.status-active,.status-success{color:var(--ok)}.status-error,.status-missing{color:var(--err)}.status-skipped,.status-trashed{color:var(--warn)}
+    .summary{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.metric{background:#f8fafc;border:1px solid var(--border);padding:10px 14px;border-radius:10px}.metric b{font-size:18px}.notice{padding:10px 12px;border-radius:10px;background:#fff7ed;color:#9a3412;font-size:13px;margin-bottom:12px}.loading{opacity:.55;pointer-events:none}
+    .project-list{display:grid;gap:12px;margin-top:18px}.project-card{border:1px solid var(--border);border-radius:12px;padding:16px}.project-title{font-size:17px;font-weight:750}.current-project{margin-top:18px;padding:14px 16px;border-radius:12px;border:1px solid #bfdbfe;background:#eff6ff}.empty-state{text-align:center;padding:28px;border:1px dashed #cbd5e1;border-radius:12px;color:var(--muted)}
+    .folder-select{width:auto}.project-filter{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.project-filter .btn.active{background:#e8f0ff;color:#1d4ed8;border:1px solid #b8cdfc}.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.dash-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}.dash-card b{display:block;font-size:22px;margin-top:4px}.log-list{display:grid;gap:8px;margin-top:10px}.log-item{padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:13px}.folder-select{width:auto}.danger-note{font-size:12px;color:#b42318}.pill{display:inline-block;padding:3px 8px;border-radius:999px;font-size:12px;background:#f2f4f7}
+    .preflight-panel{margin-top:14px;border:1px solid var(--border);border-radius:12px;padding:14px;background:#fbfdff}.preflight-ok{border-color:#abefc6;background:#ecfdf3}.preflight-block{border-color:#fecaca;background:#fff1f1}.issue-list{margin:10px 0 0;padding-left:20px}.issue-error{color:var(--err)}.issue-warning{color:var(--warn)}
+    @media(max-width:760px){.grid,.row,.dashboard-grid{grid-template-columns:1fr}.wrap{padding:16px}.hero{align-items:flex-start;flex-direction:column}.full{grid-column:auto}}
+  </style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="hero">
+    <div><h1>Drive Folder Manager for Education</h1><div class="subtitle">Google 雲端硬碟資料夾批次建立、智慧檢查、失敗重試、權限與資料夾管理</div></div>
+    <div class="hero-right"><div class="account-box">👤 <span id="currentUser">讀取帳號中...</span></div><div class="badge" id="versionBadge">v3.7</div><button class="btn danger" onclick="logoutAndSwitchAccount()">登出／切換帳號</button></div>
+  </div>
+
+  <div class="notice">v3.7：建立新專案時可選擇「自動建立專案資料夾」或「使用既有資料夾」。自動建立模式會把專案資料夾自動帶入「1. 建立位置與規則」。</div>
+
+  <section class="card full" style="margin-bottom:18px">
+    <div class="project-header"><div><h2>📁 專案與資料夾管理</h2><div class="hint">先選擇專案，再於同一區域查看與管理該專案的資料夾。</div></div><button class="btn primary" onclick="showCreateProjectDialog()">＋ 建立新專案</button></div>
+    <div class="project-filter"><button id="filterActiveBtn" class="btn ghost active" onclick="setProjectFilter('active')">進行中</button><button id="filterArchivedBtn" class="btn ghost" onclick="setProjectFilter('archived')">已封存</button><button id="filterAllBtn" class="btn ghost" onclick="setProjectFilter('all')">全部</button></div>
+    <div id="currentProjectPanel" class="current-project hidden">
+      <div class="project-header" style="margin:0"><div>目前專案：<strong id="currentProjectName"></strong><div id="currentProjectMeta" class="hint"></div></div><div class="actions"><button class="btn secondary" onclick="showEditCurrentProject()">✏️ 編輯專案</button><button class="btn ghost" onclick="refreshProjectDashboard()">重新整理儀表板</button><button class="btn ghost" onclick="clearCurrentProject()">取消選取</button></div></div>
+      <div id="projectDashboard" class="dashboard-grid"></div>
+      <div id="projectRecentLogs" class="log-list"></div>
+    </div>
+    <div id="createProjectPanel" class="hidden" style="margin-top:18px;border-top:1px solid #ddd;padding-top:18px">
+      <h3>建立新專案</h3>
+      <div class="row"><div class="field"><label>專案名稱</label><input id="newProjectName" placeholder="例如：115年度數位學習成果"></div><div class="field"><label>Drive 類型</label><select id="newProjectDriveType"><option value="myDrive">我的雲端硬碟</option><option value="sharedDrive">共用雲端硬碟</option></select></div></div>
+      <div class="field"><label>專案說明</label><textarea id="newProjectDescription" style="min-height:70px"></textarea></div>
+      <div class="field">
+        <label>專案資料夾方式</label>
+        <select id="newProjectFolderMode" onchange="toggleNewProjectFolderMode()">
+          <option value="create">建立新的專案資料夾（建議）</option>
+          <option value="existing">使用原本／既有的資料夾</option>
+        </select>
+        <div class="hint">建立新資料夾：系統會在指定上層位置建立「專案名稱」資料夾，並自動帶入下方「1. 建立位置與規則」。使用既有資料夾：建立專案後，由使用者自行在「1. 建立位置與規則」貼上原本資料夾 ID 或網址。</div>
+      </div>
+      <div id="newProjectRootParentField" class="field"><label>上層母資料夾 ID 或網址</label><input id="newProjectParentFolder" placeholder="貼上要放置新專案資料夾的 Google Drive 資料夾網址或 Folder ID"><div class="hint">系統會在此位置建立一個與「專案名稱」相同的資料夾。</div></div>
+      <div id="existingFolderModeHint" class="notice hidden" style="margin-top:8px">建立專案後，請到「1. 建立位置與規則」自行貼上你原本／既有的資料夾 ID 或網址；系統不會自動建立新的專案資料夾。</div>
+      <div class="actions"><button class="btn primary" onclick="saveNewProject()">建立專案</button><button class="btn ghost" onclick="hideCreateProjectDialog()">取消</button></div>
+    </div>
+    <div id="editProjectPanel" class="hidden" style="margin-top:18px;border-top:1px solid #ddd;padding-top:18px">
+      <h3>編輯專案</h3>
+      <input id="editProjectId" type="hidden">
+      <div class="row"><div class="field"><label>專案名稱</label><input id="editProjectName"></div><div class="field"><label>Drive 類型</label><select id="editProjectDriveType"><option value="myDrive">我的雲端硬碟</option><option value="sharedDrive">共用雲端硬碟</option></select></div></div>
+      <div class="field"><label>專案說明</label><textarea id="editProjectDescription" style="min-height:70px"></textarea></div>
+      <div class="field"><label>母資料夾 ID 或網址</label><input id="editProjectParentFolder"></div>
+      <div class="actions"><button class="btn primary" onclick="saveProjectEdit()">儲存修改</button><button class="btn ghost" onclick="hideEditProjectPanel()">取消</button></div>
+    </div>
+    <div id="projectList" class="project-list"><div class="empty-state">載入專案中...</div></div>
+
+    <div id="integratedFolderPanel" class="hidden" style="margin-top:20px;border-top:1px solid var(--border);padding-top:18px">
+      <div class="toolbar">
+        <div>
+          <h3 style="margin:0">目前專案的資料夾</h3>
+          <div class="hint">可直接查看、同步、移到垃圾桶或還原，不必再到另一個區塊操作。</div>
+        </div>
+        <div class="actions">
+          <button class="btn secondary" onclick="loadManagedFolders()">重新整理</button>
+          <button class="btn ghost" onclick="syncFolderStatus()">同步 Drive 狀態</button>
+        </div>
+      </div>
+      <div class="actions" style="margin-bottom:12px">
+        <button class="btn danger" onclick="trashSelectedFolders()">批次移到垃圾桶</button>
+        <button class="btn success" onclick="restoreSelectedFolders()">批次還原</button>
+        <span class="danger-note">批次移到垃圾桶會要求輸入 DELETE 二次確認。</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th><input type="checkbox" class="folder-select" id="selectAllFolders" onchange="toggleAllFolders(this.checked)"></th><th>名稱</th><th>狀態</th><th>Folder ID</th><th>Drive</th><th>操作</th></tr></thead>
+          <tbody id="folderManageBody"><tr><td colspan="6">請先開啟一個專案</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card"><h2>1. 建立位置與規則</h2><div class="field"><label>母資料夾 ID 或網址</label><input id="parentId" placeholder="貼上 Google Drive Folder URL 或 Folder ID"><div class="hint" id="parentIdHint">若建立新專案資料夾，系統會自動帶入；若使用既有資料夾，請自行貼上原本資料夾的 ID 或網址。</div></div><div class="row"><div class="field"><label>重複名稱</label><select id="duplicatePolicy"><option value="skip">略過同名資料夾（建議）</option><option value="create">仍然建立</option></select></div><div class="field"><label>預設權限</label><select id="defaultRole"><option value="writer">編輯者</option><option value="reader">檢視者</option></select></div></div></section>
+    <section class="card"><h2>2. 資料夾範本</h2><textarea id="templateFolders" placeholder="01_計畫書&#10;02_成果報告&#10;03_照片與影片"></textarea><div class="hint">一行一個子資料夾名稱。</div></section>
+
+    <section class="card full"><h2>3. 匯入要建立的名稱</h2>
+      <div class="tabs"><button class="tab active" data-tab="paste">批次貼上</button><button class="tab" data-tab="single">單一建立</button><button class="tab" data-tab="csv">CSV 匯入</button><button class="tab" data-tab="manual">表格輸入</button></div>
+      <div id="tab-paste"><textarea id="bulkNames" placeholder="成功國中&#10;中正國中&#10;建德國中"></textarea></div>
+      <div id="tab-single" class="hidden"><input id="singleName" placeholder="例如：成功國中"></div>
+      <div id="tab-csv" class="hidden"><input id="csvFile" type="file" accept=".csv,text/csv"><div class="hint">欄位：name,email1,role1,email2,role2</div></div>
+      <div id="tab-manual" class="hidden"><textarea id="manualRows" placeholder="成功國中,a@school.edu.tw,writer"></textarea></div>
+      <div class="field" style="margin-top:15px"><label>統一加入 Email</label><textarea id="globalEmails" style="min-height:80px"></textarea></div>
+      <div class="actions"><button class="btn secondary" onclick="runPreflight(false)">🔎 建立前智慧檢查</button><button class="btn primary" onclick="runCreate()">開始建立</button><button class="btn ghost" onclick="loadDemo()">載入範例</button></div><div id="preflightPanel" class="preflight-panel hidden"></div>
+    </section>
+
+    <section class="card full"><h2>4. 預覽 / 執行結果</h2><div class="summary" id="summary"></div><div class="actions" style="margin-bottom:12px"><button id="retryFailedBtn" class="btn danger hidden" onclick="retryFailedItems()">↻ 只重試失敗項目</button><button class="btn ghost" onclick="exportCsv()">匯出 CSV</button><button class="btn ghost" onclick="copyLinks()">複製所有成功連結</button></div><div class="table-wrap"><table><thead><tr><th>#</th><th>名稱</th><th>狀態</th><th>Folder ID</th><th>資料夾連結</th><th>訊息</th></tr></thead><tbody id="resultBody"><tr><td colspan="6">尚未執行</td></tr></tbody></table></div></section>
+  </div>
+</div>
+
+<script>
+let activeTab='paste',parsedCsvRows=[],lastResults=[],projectsCache=[],currentProject=null,appUrl='',projectFilter='active',lastPayload=null,lastPreflight=null;
+
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{activeTab=btn.dataset.tab;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active');['paste','single','csv','manual'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==activeTab));}));
+
+document.getElementById('csvFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;parsedCsvRows=parseCsv(await f.text());alert('已讀取 '+parsedCsvRows.length+' 筆資料');});
+
+function logoutAndSwitchAccount(){if(!confirm('確定要登出目前 Google 帳號並切換帳號嗎？'))return;localStorage.removeItem('currentProjectId');const u=appUrl||window.location.href;window.top.location.href='https://accounts.google.com/Logout?continue='+encodeURIComponent(u);}
+
+function parseCsv(text){const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());if(!lines.length)return[];const rows=lines.map(parseCsvLine),headers=rows.shift().map(h=>h.trim().toLowerCase());return rows.map(cols=>{const o={};headers.forEach((h,i)=>o[h]=(cols[i]||'').trim());const permissions=[];for(let i=1;i<=5;i++){const email=o['email'+i]||'';if(email)permissions.push({email,role:o['role'+i]||'reader'});}return{name:o.name||o['名稱']||'',permissions};}).filter(r=>r.name);}
+function parseCsvLine(line){let out=[],cur='',quote=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(quote&&line[i+1]==='"'){cur+='"';i++;}else quote=!quote;}else if(c===','&&!quote){out.push(cur);cur='';}else cur+=c;}out.push(cur);return out;}
+
+function getRows(){let rows=[];if(activeTab==='single'){const n=document.getElementById('singleName').value.trim();if(n)rows=[{name:n,permissions:[]}];}if(activeTab==='paste')rows=document.getElementById('bulkNames').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(name=>({name,permissions:[]}));if(activeTab==='csv')rows=parsedCsvRows;if(activeTab==='manual')rows=document.getElementById('manualRows').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{const [name,email,role]=line.split(',').map(x=>(x||'').trim());return{name,permissions:email?[{email,role:role||'reader'}]:[]};});const role=document.getElementById('defaultRole').value;const globals=document.getElementById('globalEmails').value.split(/[\n,;]/).map(x=>x.trim()).filter(Boolean).map(email=>({email,role}));return rows.map(r=>({name:r.name,permissions:[...(r.permissions||[]),...globals]}));}
+function getPayload(){return{parentFolderId:document.getElementById('parentId').value.trim(),duplicatePolicy:document.getElementById('duplicatePolicy').value,templateFolders:document.getElementById('templateFolders').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),rows:getRows(),projectId:currentProject?currentProject.projectId:''};}
+
+function preview(){const p=getPayload(),perm=p.rows.reduce((n,r)=>n+r.permissions.length,0);renderSummary({total:p.rows.length,preview:true,children:p.rows.length*p.templateFolders.length,permissions:perm});document.getElementById('resultBody').innerHTML=p.rows.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td>待建立</td><td>-</td><td>-</td><td>${r.permissions.length} 筆權限</td></tr>`).join('')||'<tr><td colspan="6">沒有資料</td></tr>';}
+function runPreflight(startAfterCheck){const p=getPayload();lastPayload=JSON.parse(JSON.stringify(p));if(!p.parentFolderId){alert('請輸入母資料夾 ID 或網址');return;}if(!p.rows.length){alert('請輸入至少一筆資料');return;}const panel=document.getElementById('preflightPanel');panel.className='preflight-panel';panel.innerHTML='檢查中...';setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);lastPreflight=r;renderPreflight(r);if(startAfterCheck&&r&&r.success&&r.canProceed){const s=r.stats||{};const warning=s.warningCount||0;const msg='智慧檢查完成：\n資料 '+(s.totalRows||0)+' 筆\n既有同名 '+(s.existingFolderCount||0)+' 筆\n預計子資料夾 '+(s.estimatedChildFolders||0)+' 個\n預計權限 '+(s.permissionCount||0)+' 筆'+(warning?'\n警告 '+warning+' 項':'')+'\n\n確定開始建立？';if(confirm(msg))executeCreate(lastPayload,false);}}).withFailureHandler(e=>{setLoading(false);panel.className='preflight-panel preflight-block';panel.innerHTML='<b>檢查失敗</b><div>'+esc(e.message||e)+'</div>';}).preflightCheck(p);}
+function renderPreflight(r){const panel=document.getElementById('preflightPanel');panel.classList.remove('hidden');if(!r||!r.success){panel.className='preflight-panel preflight-block';panel.innerHTML='<b>檢查失敗</b><div>'+esc(r&&r.message?r.message:'未知錯誤')+'</div>';return;}const s=r.stats||{},issues=r.issues||[];panel.className='preflight-panel '+(r.canProceed?'preflight-ok':'preflight-block');let html='<b>'+(r.canProceed?'✅ 可以執行':'⛔ 請先修正錯誤')+'</b><div class="summary"><div class="metric">資料筆數<br><b>'+(s.totalRows||0)+'</b></div><div class="metric">輸入重複名稱<br><b>'+(s.duplicateInputNameCount||0)+'</b></div><div class="metric">Drive 既有同名<br><b>'+(s.existingFolderCount||0)+'</b></div><div class="metric">預計子資料夾<br><b>'+(s.estimatedChildFolders||0)+'</b></div><div class="metric">預計權限<br><b>'+(s.permissionCount||0)+'</b></div><div class="metric">錯誤<br><b>'+(s.errorCount||0)+'</b></div><div class="metric">警告<br><b>'+(s.warningCount||0)+'</b></div></div>';if(issues.length){html+='<ul class="issue-list">'+issues.map(x=>'<li class="issue-'+esc(x.severity)+'">'+(x.severity==='error'?'錯誤：':'警告：')+esc(x.message)+'</li>').join('')+'</ul>';}else{html+='<div class="hint">未發現錯誤或警告。</div>';}panel.innerHTML=html;}
+function runCreate(){runPreflight(true);}
+function executeCreate(payload,isRetry){setLoading(true);google.script.run.withSuccessHandler(res=>{setLoading(false);lastResults=res.results||[];renderResults(res);if(currentProject)loadManagedFolders();refreshProjectDashboard();if(isRetry)alert('失敗項目重試完成：成功 '+(res.success||0)+'，略過 '+(res.skipped||0)+'，失敗 '+(res.error||0));}).withFailureHandler(err=>{setLoading(false);alert(err.message||err);}).createFoldersBatch(payload);}
+function retryFailedItems(){if(!lastPayload||!lastResults.length){alert('目前沒有可重試的失敗項目');return;}const failedNames=new Set(lastResults.filter(r=>r.status==='error').map(r=>String(r.name||'')));const failedRows=(lastPayload.rows||[]).filter(r=>failedNames.has(String(r.name||'')));if(!failedRows.length){alert('目前沒有失敗項目');return;}const retryPayload=JSON.parse(JSON.stringify(lastPayload));retryPayload.rows=failedRows;retryPayload.duplicatePolicy='skip';if(!confirm('只重試失敗的 '+failedRows.length+' 筆資料。\n\n為避免重複建立，重試時會自動使用「略過同名資料夾」。是否繼續？'))return;executeCreate(retryPayload,true);}
+function renderSummary(res){let h=`<div class="metric">總筆數<br><b>${res.total||0}</b></div>`;h+=res.preview?`<div class="metric">預計子資料夾<br><b>${res.children||0}</b></div><div class="metric">預計權限<br><b>${res.permissions||0}</b></div>`:`<div class="metric">成功<br><b>${res.success||0}</b></div><div class="metric">略過<br><b>${res.skipped||0}</b></div><div class="metric">失敗<br><b>${res.error||0}</b></div>`;document.getElementById('summary').innerHTML=h;}
+function renderResults(res){renderSummary(res);document.getElementById('resultBody').innerHTML=(res.results||[]).map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.name)}</td><td class="status-${r.status}">${esc(r.status)}</td><td>${esc(r.folderId||'-')}</td><td>${r.url?`<a href="${r.url}" target="_blank">開啟</a>`:'-'}</td><td>${esc(r.message||'')}</td></tr>`).join('');const failed=(res.results||[]).filter(r=>r.status==='error').length;document.getElementById('retryFailedBtn').classList.toggle('hidden',failed===0);}
+function exportCsv(){if(!lastResults.length){alert('沒有可匯出的結果');return;}const rows=[['名稱','狀態','Folder ID','資料夾連結','訊息'],...lastResults.map(r=>[r.name,r.status,r.folderId||'',r.url||'',r.message||''])];const csv='\uFEFF'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(currentProject?currentProject.projectName:'drive-folder')+'-results.csv';a.click();URL.revokeObjectURL(a.href);}
+function copyLinks(){const t=lastResults.filter(r=>r.url).map(r=>r.name+'\t'+r.url).join('\n');if(!t){alert('沒有可複製連結');return;}navigator.clipboard.writeText(t).then(()=>alert('已複製名稱與連結'));}
+function loadDemo(){document.getElementById('bulkNames').value='成功國中\n中正國中\n建德國中';document.getElementById('templateFolders').value='01_計畫書\n02_成果報告\n03_照片與影片';preview();document.getElementById('preflightPanel').classList.add('hidden');}
+
+function showCreateProjectDialog(){document.getElementById('createProjectPanel').classList.remove('hidden');document.getElementById('editProjectPanel').classList.add('hidden');toggleNewProjectFolderMode();}
+function hideCreateProjectDialog(){document.getElementById('createProjectPanel').classList.add('hidden');}
+function toggleNewProjectFolderMode(){
+  const mode=document.getElementById('newProjectFolderMode').value;
+  document.getElementById('newProjectRootParentField').classList.toggle('hidden',mode!=='create');
+  document.getElementById('existingFolderModeHint').classList.toggle('hidden',mode!=='existing');
+}
+function clearCreateProjectForm(){
+  ['newProjectName','newProjectDescription','newProjectParentFolder'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('newProjectDriveType').value='myDrive';
+  document.getElementById('newProjectFolderMode').value='create';
+  toggleNewProjectFolderMode();
+}
+function saveNewProject(){
+  const name=document.getElementById('newProjectName').value.trim();
+  const mode=document.getElementById('newProjectFolderMode').value;
+  const rootParent=document.getElementById('newProjectParentFolder').value.trim();
+  if(!name){alert('請輸入專案名稱');return;}
+  if(mode==='create'&&!rootParent){alert('請輸入上層母資料夾 ID 或網址。系統會在此位置建立同名專案資料夾。');return;}
+  const data={
+    projectName:name,
+    description:document.getElementById('newProjectDescription').value,
+    driveType:document.getElementById('newProjectDriveType').value,
+    folderMode:mode,
+    parentFolderId:mode==='create'?rootParent:''
+  };
+  setLoading(true);
+  google.script.run.withSuccessHandler(r=>{
+    setLoading(false);
+    if(!r.success){alert('建立失敗：'+r.message);return;}
+    const createdProject=r.project||null;
+    clearCreateProjectForm();
+    hideCreateProjectDialog();
+    if(createdProject){
+      currentProject=createdProject;
+      localStorage.setItem('currentProjectId',createdProject.projectId);
+      document.getElementById('parentId').value=createdProject.parentFolderId||'';
+      updateCurrentProjectPanel();
+      if(createdProject.parentFolderId){
+        document.getElementById('parentIdHint').textContent='已自動帶入新建立的專案資料夾。後續學校／單位資料夾會建立在此位置。';
+      }else{
+        document.getElementById('parentIdHint').textContent='此專案使用既有資料夾模式，請自行貼上原本資料夾的 ID 或網址。';
+      }
+    }
+    loadProjects();
+    alert(r.message||'專案建立成功');
+  }).withFailureHandler(e=>{
+    setLoading(false);
+    alert(e.message||e);
+  }).createProject(data);
+}
+function loadProjects(){google.script.run.withSuccessHandler(r=>{if(!r.success){document.getElementById('projectList').innerHTML='<div class="empty-state">'+esc(r.message)+'</div>';return;}projectsCache=r.projects||[];restoreCurrentProject();renderProjects(projectsCache);}).getProjects();}
+function setProjectFilter(filter){projectFilter=filter;['Active','Archived','All'].forEach(x=>document.getElementById('filter'+x+'Btn').classList.remove('active'));document.getElementById('filter'+filter.charAt(0).toUpperCase()+filter.slice(1)+'Btn').classList.add('active');renderProjects(projectsCache);}
+function renderProjects(projects){let list=projects||[];if(projectFilter==='active')list=list.filter(p=>p.status!=='archived');if(projectFilter==='archived')list=list.filter(p=>p.status==='archived');if(!list.length){document.getElementById('projectList').innerHTML='<div class="empty-state">'+(projectFilter==='archived'?'目前沒有已封存專案':'沒有符合條件的專案')+'</div>';return;}document.getElementById('projectList').innerHTML=list.map(p=>`<div class="project-card"><div class="project-header"><div><div class="project-title">${esc(p.projectName)} ${p.status==='archived'?'<span class="pill">已封存</span>':''}</div><div class="project-meta">${p.driveType==='sharedDrive'?'共用雲端硬碟':'我的雲端硬碟'}${p.description?' ・ '+esc(p.description):''}</div></div><div class="actions">${p.status!=='archived'?`<button class="btn secondary" onclick="openProject('${p.projectId}')">管理</button><button class="btn ghost" onclick="showEditProject('${p.projectId}')">編輯</button>`:`<button class="btn success" onclick="restoreProjectFrontend('${p.projectId}')">解除封存</button>`}${p.parentFolderUrl?`<a class="btn ghost" href="${p.parentFolderUrl}" target="_blank" style="text-decoration:none">Drive</a>`:''}<button class="btn ghost" onclick="copyProject('${p.projectId}')">複製</button>${p.status!=='archived'?`<button class="btn danger" onclick="archiveProjectFrontend('${p.projectId}')">封存</button>`:''}<button class="btn danger" onclick="deleteProjectFrontend('${p.projectId}','${escJs(p.projectName)}')">刪除專案</button></div></div></div>`).join('');}
+function openProject(id){const p=projectsCache.find(x=>x.projectId===id);if(!p||p.status==='archived')return;currentProject=p;localStorage.setItem('currentProjectId',id);document.getElementById('parentId').value=p.parentFolderId||'';document.getElementById('parentIdHint').textContent=p.parentFolderId?'已帶入此專案目前設定的母資料夾。':'此專案尚未設定母資料夾，請自行貼上原本／既有資料夾的 ID 或網址。';updateCurrentProjectPanel();loadManagedFolders();refreshProjectDashboard();}
+function restoreCurrentProject(){const id=localStorage.getItem('currentProjectId');if(!id)return;const p=projectsCache.find(x=>x.projectId===id&&x.status!=='archived');if(p){currentProject=p;document.getElementById('parentId').value=p.parentFolderId||'';document.getElementById('parentIdHint').textContent=p.parentFolderId?'已帶入此專案目前設定的母資料夾。':'此專案尚未設定母資料夾，請自行貼上原本／既有資料夾的 ID 或網址。';updateCurrentProjectPanel();loadManagedFolders();refreshProjectDashboard();}}
+function updateCurrentProjectPanel(){const panel=document.getElementById('currentProjectPanel'),folderPanel=document.getElementById('integratedFolderPanel');if(!currentProject){panel.classList.add('hidden');folderPanel.classList.add('hidden');return;}document.getElementById('currentProjectName').textContent=currentProject.projectName;document.getElementById('currentProjectMeta').textContent=(currentProject.driveType==='sharedDrive'?'共用雲端硬碟':'我的雲端硬碟')+(currentProject.description?'｜'+currentProject.description:'');panel.classList.remove('hidden');folderPanel.classList.remove('hidden');}
+function clearCurrentProject(){currentProject=null;localStorage.removeItem('currentProjectId');updateCurrentProjectPanel();document.getElementById('folderManageBody').innerHTML='<tr><td colspan="6">請先開啟一個專案</td></tr>';document.getElementById('projectDashboard').innerHTML='';document.getElementById('projectRecentLogs').innerHTML='';document.getElementById('selectAllFolders').checked=false;}
+function showEditCurrentProject(){if(currentProject)showEditProject(currentProject.projectId);}
+function showEditProject(id){const p=projectsCache.find(x=>x.projectId===id);if(!p)return;document.getElementById('editProjectId').value=p.projectId;document.getElementById('editProjectName').value=p.projectName||'';document.getElementById('editProjectDescription').value=p.description||'';document.getElementById('editProjectDriveType').value=p.driveType||'myDrive';document.getElementById('editProjectParentFolder').value=p.parentFolderId||'';document.getElementById('editProjectPanel').classList.remove('hidden');document.getElementById('createProjectPanel').classList.add('hidden');document.getElementById('editProjectPanel').scrollIntoView({behavior:'smooth',block:'center'});}
+function hideEditProjectPanel(){document.getElementById('editProjectPanel').classList.add('hidden');}
+function saveProjectEdit(){const id=document.getElementById('editProjectId').value;const name=document.getElementById('editProjectName').value.trim();if(!id||!name){alert('專案名稱不可空白');return;}const data={projectId:id,projectName:name,description:document.getElementById('editProjectDescription').value,driveType:document.getElementById('editProjectDriveType').value,parentFolderId:document.getElementById('editProjectParentFolder').value};setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);if(!r.success){alert('更新失敗：'+r.message);return;}hideEditProjectPanel();if(currentProject&&currentProject.projectId===id){currentProject={...currentProject,...data,parentFolderId:document.getElementById('editProjectParentFolder').value};}loadProjects();}).withFailureHandler(e=>{setLoading(false);alert(e.message||e);}).updateProject(data);}
+function copyProject(id){google.script.run.withSuccessHandler(r=>{if(!r.success){alert(r.message);return;}loadProjects();}).duplicateProject(id);}
+function archiveProjectFrontend(id){if(!confirm('確定封存此專案？\n\n資料夾與紀錄都不會刪除。'))return;google.script.run.withSuccessHandler(r=>{if(!r.success){alert(r.message);return;}if(currentProject&&currentProject.projectId===id)clearCurrentProject();loadProjects();}).archiveProject(id);}
+function restoreProjectFrontend(id){if(!confirm('確定解除封存此專案？'))return;google.script.run.withSuccessHandler(r=>{if(!r.success){alert(r.message);return;}loadProjects();}).restoreProject(id);}
+
+function deleteProjectFrontend(id,name){
+  const warning='你即將刪除「'+name+'」的專案紀錄。\n\n這會刪除系統資料庫中的：\n・專案紀錄\n・此專案的資料夾管理紀錄\n・此專案的權限紀錄\n\nGoogle Drive 上真正的資料夾與檔案「不會刪除」。\n\n若確定要刪除，請在下一步完整輸入專案名稱。';
+  if(!confirm(warning))return;
+  const typed=prompt('請完整輸入專案名稱以確認刪除：\n\n'+name);
+  if(typed===null)return;
+  if(typed.trim()!==name.trim()){alert('專案名稱不一致，已取消刪除。');return;}
+  setLoading(true);
+  google.script.run
+    .withSuccessHandler(r=>{
+      setLoading(false);
+      if(!r||!r.success){alert('刪除失敗：'+(r?r.message:'未知錯誤'));return;}
+      if(currentProject&&currentProject.projectId===id)clearCurrentProject();
+      alert('專案紀錄已刪除。\n\nGoogle Drive 資料夾沒有被刪除。\n刪除資料夾紀錄：'+(r.deletedFolders||0)+' 筆\n刪除權限紀錄：'+(r.deletedPermissions||0)+' 筆');
+      loadProjects();
+    })
+    .withFailureHandler(e=>{setLoading(false);alert('刪除失敗：'+(e.message||e));})
+    .deleteProject(id,typed.trim());
+}
+
+function refreshProjectDashboard(){if(!currentProject)return;document.getElementById('projectDashboard').innerHTML='<div class="dash-card">載入統計中...</div>';google.script.run.withSuccessHandler(r=>{if(!r.success){document.getElementById('projectDashboard').innerHTML='<div class="dash-card">'+esc(r.message)+'</div>';return;}const s=r.stats||{};document.getElementById('projectDashboard').innerHTML=`<div class="dash-card">資料夾總數<b>${s.totalFolders||0}</b></div><div class="dash-card">正常<b>${s.activeFolders||0}</b></div><div class="dash-card">垃圾桶<b>${s.trashedFolders||0}</b></div><div class="dash-card">不存在<b>${s.missingFolders||0}</b></div><div class="dash-card">權限紀錄<b>${s.permissionCount||0}</b></div><div class="dash-card">操作紀錄<b>${s.logCount||0}</b></div><div class="dash-card">既有/略過<b>${s.skippedFolders||0}</b></div><div class="dash-card">錯誤<b>${s.errorFolders||0}</b></div>`;}).getProjectDashboardStats(currentProject.projectId);google.script.run.withSuccessHandler(r=>{if(!r.success)return;const logs=r.logs||[];document.getElementById('projectRecentLogs').innerHTML=logs.length?'<div class="hint" style="margin-top:12px">最近操作</div>'+logs.map(l=>`<div class="log-item"><b>${esc(actionLabel(l.action))}</b>｜${esc(l.targetName||l.targetType||'')}｜${esc(l.status||'')}<div class="hint">${formatDateTime(l.timestamp)} ${l.userEmail?'｜'+esc(l.userEmail):''}${l.message?'｜'+esc(l.message):''}</div></div>`).join(''):'';}).getProjectRecentLogs(currentProject.projectId,5);}
+function actionLabel(a){return({CREATE_PROJECT:'建立專案',UPDATE_PROJECT:'更新專案',CREATE_FOLDER:'建立資料夾',REUSE_FOLDER:'使用既有資料夾',TRASH_FOLDER:'移到垃圾桶',RESTORE_FOLDER:'還原資料夾',SYNC_FOLDER_STATUS:'同步狀態',DELETE_PROJECT:'刪除專案'})[a]||a||'操作';}
+function formatDateTime(v){if(!v)return'';const d=new Date(v);return isNaN(d)?String(v):d.toLocaleString('zh-TW');}
+
+function loadManagedFolders(){if(!currentProject){document.getElementById('folderManageBody').innerHTML='<tr><td colspan="6">請先開啟一個專案</td></tr>';return;}document.getElementById('folderManageBody').innerHTML='<tr><td colspan="6">載入中...</td></tr>';google.script.run.withSuccessHandler(r=>{if(!r.success){document.getElementById('folderManageBody').innerHTML='<tr><td colspan="6">'+esc(r.message)+'</td></tr>';return;}renderManagedFolders(r.folders||[]);}).getProjectFolders(currentProject.projectId);}
+function renderManagedFolders(folders){if(!folders.length){document.getElementById('folderManageBody').innerHTML='<tr><td colspan="6">此專案尚無已記錄資料夾</td></tr>';return;}document.getElementById('folderManageBody').innerHTML=folders.map(f=>`<tr><td><input type="checkbox" class="folder-select managed-folder-check" value="${esc(f.folderId)}"></td><td>${esc(f.folderName)}</td><td class="status-${esc(f.status)}"><span class="pill">${statusLabel(f.status)}</span></td><td>${esc(f.folderId)}</td><td>${f.folderUrl?`<a href="${f.folderUrl}" target="_blank">開啟</a>`:'-'}</td><td><div class="actions">${f.status==='trashed'?`<button class="btn success" onclick="restoreOneFolder('${f.folderId}')">還原</button>`:`<button class="btn danger" onclick="trashOneFolder('${f.folderId}','${escJs(f.folderName)}')">移到垃圾桶</button>`}</div></td></tr>`).join('');}
+function statusLabel(s){return({active:'正常',success:'正常',skipped:'既有',trashed:'垃圾桶',missing:'不存在',error:'錯誤'})[s]||s||'未知';}
+function toggleAllFolders(checked){document.querySelectorAll('.managed-folder-check').forEach(x=>x.checked=checked);}
+function selectedFolderIds(){return Array.from(document.querySelectorAll('.managed-folder-check:checked')).map(x=>x.value);}
+function trashOneFolder(id,name){if(!confirm('確定將「'+name+'」移到 Google Drive 垃圾桶嗎？\n\n可之後還原。'))return;setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);if(!r.success)alert('移到垃圾桶失敗：'+r.message);loadManagedFolders();refreshProjectDashboard();}).withFailureHandler(e=>{setLoading(false);alert(e.message||e);}).trashFolder(id,currentProject?currentProject.projectId:'');}
+function restoreOneFolder(id){if(!confirm('確定還原此資料夾嗎？'))return;setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);if(!r.success)alert('還原失敗：'+r.message);loadManagedFolders();refreshProjectDashboard();}).restoreFolder(id,currentProject?currentProject.projectId:'');}
+function trashSelectedFolders(){const ids=selectedFolderIds();if(!ids.length){alert('請先勾選至少一個資料夾');return;}const text=prompt('即將把 '+ids.length+' 個資料夾移到垃圾桶。\n請輸入 DELETE 確認：');if(text!=='DELETE'){alert('已取消。');return;}setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);alert('完成：成功 '+r.successCount+'，失敗 '+r.errorCount);loadManagedFolders();refreshProjectDashboard();}).trashFoldersBatch(ids,currentProject?currentProject.projectId:'');}
+function restoreSelectedFolders(){const ids=selectedFolderIds();if(!ids.length){alert('請先勾選至少一個資料夾');return;}if(!confirm('確定還原選取的 '+ids.length+' 個資料夾嗎？'))return;setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);alert('完成：成功 '+r.successCount+'，失敗 '+r.errorCount);loadManagedFolders();refreshProjectDashboard();}).restoreFoldersBatch(ids,currentProject?currentProject.projectId:'');}
+function syncFolderStatus(){if(!currentProject){alert('請先開啟專案');return;}setLoading(true);google.script.run.withSuccessHandler(r=>{setLoading(false);if(!r.success){alert('同步失敗：'+r.message);return;}alert('已同步 '+r.total+' 筆資料夾狀態');loadManagedFolders();refreshProjectDashboard();}).syncProjectFolderStatus(currentProject.projectId);}
+
+function setLoading(v){document.getElementById('app').classList.toggle('loading',v);}
+function csvCell(v){const s=String(v??'');return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function escJs(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' ');}
+
+window.addEventListener('load',()=>{google.script.run.withSuccessHandler(info=>{appUrl=info.appUrl||'';document.getElementById('versionBadge').textContent='v'+(info.version||'3.2.1');document.getElementById('currentUser').textContent=info.email||'目前 Google 帳號';}).getAppInfo();loadProjects();});
+</script>
+</body>
+</html>
